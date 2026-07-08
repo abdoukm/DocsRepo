@@ -1,112 +1,138 @@
-# Cashflow Monitor — How to Use
+# How to use Cashflow Monitor
 
-Cashflow Monitor is a local, offline Chrome extension that projects your account
-balances forward in time based on your income, bills, and transfers, so you can see
-upcoming low-balance and overdraft situations before they happen — and fix them.
+Cashflow Monitor is a local, offline cashflow and bill-projection tracker that runs as a
+Chrome side panel. By default nothing you enter ever leaves your browser, unless you turn
+on the optional Google Drive sync feature yourself — see `PRIVACY.md` for details.
 
-All data stays on your device (see [PRIVACY.md](./PRIVACY.md)). Nothing is ever sent
-anywhere.
+Open it from the toolbar icon or the Chrome side panel picker. The sidebar on the left is
+always visible and lets you jump between the pages described below.
 
-## Getting started
+## 1. Set up your accounts
 
-1. Click the Cashflow Monitor icon in the Chrome toolbar to open the full dashboard in
-   its own tab. You can also open it as a **side panel** (via Chrome's side panel picker)
-   to keep it docked alongside another tab — both views share the same data live.
-2. Start in the **Accounts** tab and add each account you want to track.
-3. Add your **Income sources** and **Bills**, and any recurring **Transfers** between
-   accounts.
-4. Open **Dashboard** or **Ledger** to see the projection.
+Go to **Accounts** and add one entry per bank account, credit card, or cash account you
+want to track.
 
-## Accounts
+- **Starting balance** and **As of date** — the balance you actually had on that date.
+  This is the anchor everything else projects forward from.
+- **Low-balance warning threshold** (optional) — get flagged before you hit $0, not just
+  after. Leave blank to only warn on actual overdrafts.
+- **Color** — used for the account's icon badge throughout the app (Dashboard cards,
+  account tags in the Ledger, etc).
 
-Each account needs:
-- **Name**
-- **Starting balance** and the **date** that balance is accurate as of
-- An optional **low-balance warning threshold** — leave blank if you only want to be
-  warned about actual overdrafts (below $0)
-- A **color**, used as a small identity dot next to the account name throughout the app
+You can edit or delete an account later; deletion is blocked while any income, bill, or
+transfer still references it (so you don't silently orphan scheduled entries).
 
-Deleting an account is blocked if any income, bill, or transfer still references it —
-you'll see exactly which items to update or remove first.
+## 2. Add your recurring money movements
 
-## Income sources & Bills
+- **Income sources** — paychecks, deposits, anything that adds money to an account.
+- **Bills** — rent, subscriptions, loan payments, anything that takes money out.
+- **Transfers** — moving money between two of your own accounts, or to/from an external
+  account (leave "From" or "To" blank for an external inflow/outflow).
 
-Both use the same form shape: a name, an amount, which account it hits, an effective
-start date (and optional end date), and a **recurrence**:
+Each of these supports four recurrence types:
 
-- **One time** — a single occurrence on a specific date.
-- **Weekly** — every N weeks, anchored to the effective start date's weekday.
-- **Monthly** — every N months, on a chosen day of month. If a month is too short for
-  that day (e.g. day 31 in February), the occurrence clamps to the last day of that
-  month instead of skipping or rolling into the next month.
-- **X times per year** — a list of specific month/day anchors (e.g. quarterly payments
-  on Jan 15 / Apr 15 / Jul 15 / Oct 15), rather than evenly-spaced intervals — this
-  matches how real recurring bills (insurance, property tax) actually fall on specific
-  calendar dates.
+- **One time** — a single scheduled date.
+- **Weekly** — every N weeks from the start date.
+- **Monthly** — every N months, optionally pinned to a specific day of month (clamped to
+  the end of shorter months).
+- **X times per year** — a custom list of month/day anchor dates (e.g. quarterly taxes).
 
-Amounts are always entered as a positive number; income adds to the account, bills
-subtract from it.
+All three list pages (Income sources, Bills, Transfers) work the same way: add, edit, or
+delete an entry, and the table shows its next-run recurrence description.
 
-## Transfers
+## 3. Dashboard
 
-Transfers move money between two of your accounts on the same recurrence model as
-income/bills. Leave **From account** blank to represent money arriving from outside the
-app (an external deposit), or leave **To account** blank for money leaving the tracked
-accounts entirely (an external payment) — at least one side is required.
+The Dashboard is your daily overview, with a **Balance as of** date picker at the top —
+change it to see projected balances for any past or future date (as far back as the
+earliest account's starting-balance date).
 
-## The Ledger
+**Account balances** — each account tile shows two figures:
+- **Available** — the balance including every scheduled transaction up to that date,
+  cleared or not. This is what drives low-balance/overdraft warnings.
+- **Cleared** — the balance including only transactions you've explicitly checked off as
+  cleared in the Ledger (see below). Useful for tracking what's actually posted to your
+  real bank balance versus what's merely scheduled.
 
-The Ledger is the full chronological list of every projected income, bill, and transfer
-occurrence within your projection horizon (see Settings), with a running balance per
-account.
+Click anywhere on an account tile to jump straight to the **Ledger**, pre-filtered to
+that account, with the date range set from the Dashboard's selected date out to three
+months later.
 
-- **Filter by column** — Date, Description, Type, Account, Amount, and Balance after
-  each have their own filter control in the header row (up to 3 active at once). Amount
-  and Balance filters accept operators like `>100` or `<=200`, or plain text.
-  The header row stays frozen while you scroll.
-- **Edit a single occurrence** — click **Edit** on any row to change just that
-  occurrence's date or amount (e.g. "rent was $50 more this month," or "paycheck landed
-  two days late"). This does **not** change the recurring rule — every other past and
-  future occurrence in that series is unaffected. Edited rows show a small blue dot;
-  use **Reset to scheduled** in the edit dialog to undo it.
-- **Cover an overdraft** — any row where the running balance goes negative shows a red
-  **Cover** button (see below).
+**Transfer reminders** — upcoming one-time transfers that need you to actually go move
+the money (this app doesn't move money for you). Click **Done** once you've made the
+transfer in your bank/card app — this only dismisses it from the reminder list; the
+transfer itself and its Ledger entries are untouched. **Edit** lets you adjust its date
+or amount without dismissing it.
 
-## Dashboard
+**Overdraft warnings** — every upcoming point where an account's Available balance dips
+below $0 (overdraft) or below its warning threshold (low balance), across your whole
+projection horizon. Click **Cover** on an overdraft to get suggestions for which other
+account(s) can fund a transfer to bring it back to $0 — accepting a suggestion creates
+the covering transfer for you.
 
-- **Balance as of** — pick any date to see each account's projected balance at that
-  point in time.
-- **Account cards** — one per account, flagged with a low-balance or overdraft badge
-  when relevant to the selected date.
-- **Upcoming one-time transfers** — a to-do list of every one-time transfer scheduled
-  today or later (including ones you create via "Cover an overdraft," below). **Edit**
-  opens it for changes; **Done** removes it once you've carried it out in real life.
-- **Upcoming warnings** — every projected low-balance or overdraft point across the
-  whole horizon, each with its own **Cover** button for overdrafts.
+## 4. Ledger
 
-## Covering an overdraft
+The Ledger is the full, itemized list of every scheduled transaction, with a **From**/
+**To** date range at the top (defaults to today → your projection horizon; From can go
+as far back as the earliest account's starting-balance date).
 
-When an account is projected to go negative, click **Cover** (on a Ledger row, a
-Dashboard account card, or a warnings-panel row). Cashflow Monitor checks every other
-account's projected balance on that same date and suggests:
+- **Clear checkbox** — check off a transaction once it's actually posted/reconciled
+  against your real bank statement. Cleared rows sort to the top of the table (then by
+  date); unreconciled rows follow, sorted by date.
+- **Balance column** — for an unreconciled row, shows the projected **Available**
+  balance plus a smaller **Cleared** balance underneath. Once a row is checked off as
+  cleared, the two necessarily agree, so it collapses to a single number.
+- **Edit** — change just one occurrence's date or amount (e.g. rent went up one month
+  only) without touching earlier or later occurrences of the same recurring item.
+  **Reset to scheduled** undoes that, while leaving the Clear checkbox state untouched.
+- **Cover** — same overdraft-coverage helper as the Dashboard, available on any
+  currently-or-future overdrawn row.
+- Filters along the header (date, description, type, account, amount, balance) narrow
+  the table further; up to three filters can be active at once.
 
-- **A single account** that can cover the full shortfall on its own, if one exists, or
-- **A combination** of accounts (largest balance first) that together cover it, with
-  a note if even all accounts combined can't fully cover the gap.
+## 5. Settings
 
-Clicking **Use this account** or **Apply this combination** creates real one-time
-transfer(s) dated that day — they immediately show up in the Ledger, Transfers list,
-and the Dashboard's to-do list, and the overdraft recalculates from there.
+- **Projection horizon (months ahead)** — how far into the future the Ledger and
+  Dashboard project by default.
+- **Currency** — display currency for all amounts (USD, CAD, EUR, GBP, AUD).
 
-## Settings
+### Backup (Export / Import)
 
-- **Projection horizon** — how many months ahead (rolling from today) the Ledger and
-  Dashboard project. Increase it to see further out; decrease it for a shorter, faster
-  view.
-- **Currency** — display currency for all amounts.
+Settings has an **Export data** / **Import data** pair:
 
-## Data & backup
+- **Export data** downloads a JSON file with everything — accounts, income sources,
+  bills, transfers, cleared/override status, and settings. Keep it somewhere safe as a
+  backup, or use it to move your data to a new computer or browser profile.
+- **Import data** picks a previously exported JSON file and restores it. Importing
+  **replaces all current data** — you'll get a confirmation prompt showing exactly what
+  it's about to overwrite before anything changes.
 
-Everything is stored locally via `chrome.storage.local`. There is currently no built-in
-export/import — if you need to move data between machines, you'd need to do so via
-Chrome's own profile sync or manual re-entry.
+### Google Drive sync (optional)
+
+By default nothing syncs anywhere — this is a single-browser-profile tool. If you'd
+rather have your data follow you across devices or Chrome profiles automatically,
+Settings has an **Enable Google Drive sync** checkbox (off by default; see `PRIVACY.md`
+for exactly what this shares and when).
+
+- **Enabling it** signs you in with your Google account and connects to a single file
+  ("cashflow-monitor-data.json") in your Drive. If both this device and that file
+  already have data, you'll get a prompt to choose **Use Drive's data** or **Upload this
+  device's data** — whichever you don't pick gets overwritten, so read the counts in the
+  prompt before choosing. If only one side has data, it's adopted automatically with no
+  prompt.
+- Once connected, every add/edit/delete is saved locally instantly (as always) and also
+  pushed to the Drive file a moment later. Opening the app on any device with sync
+  enabled pulls the latest copy from Drive automatically.
+- **Sync now** forces an immediate sync instead of waiting for the next change.
+- **Reconnect** appears if your Google sign-in has expired or been revoked — click it to
+  sign in again. (Google's "Testing" publishing mode for unverified apps can require
+  re-signing in roughly every 7 days; that's expected, not a bug.)
+- **Disconnect** turns sync off. Nothing is deleted on either side — your local data
+  stays as it is, and the Drive file is left untouched.
+
+## Tips
+
+- By default nothing syncs anywhere. If you switch computers or reinstall Chrome, your
+  data doesn't come with you unless you've exported and re-imported it, or turned on
+  Google Drive sync beforehand.
+- Archiving vs. deleting: an account can't be deleted while referenced elsewhere, so
+  clear out or reassign its incomes/bills/transfers first if you want it gone entirely.
