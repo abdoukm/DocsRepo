@@ -1,11 +1,23 @@
 # How to use Cashflow Monitor
 
-Cashflow Monitor is a local, offline cashflow and bill-projection tracker that runs as a
-Chrome side panel. By default nothing you enter ever leaves your browser, unless you turn
-on the optional Google Drive sync feature yourself — see `PRIVACY.md` for details.
+Cashflow Monitor is a local, offline cashflow and bill-projection tracker, available as a
+browser extension for **Chrome** and **Safari**. By default nothing you enter ever leaves
+your device, unless you turn on the optional Google Drive sync feature yourself — see
+`PRIVACY.md` for details.
 
-Open it from the toolbar icon or the Chrome side panel picker. The sidebar on the left is
-always visible and lets you jump between the pages described below.
+## Installing
+
+**Chrome** — install from the [Chrome Web Store](https://chromewebstore.google.com/detail/cashflow-monitor/pdjdpmadgjgkdoladhmgkbalagpghjof).
+Open it from the toolbar icon or the Chrome side panel picker.
+
+**Safari (macOS)** — download the latest `.dmg` from [GitHub Releases](https://github.com/abdoukm/cashflow-monitor/releases/latest),
+open it, and drag "Cashflow Monitor" into your Applications folder. Launch it once (you
+can quit it right after — this just registers the extension with Safari), then:
+1. Safari → Settings → Extensions → enable **Cashflow Monitor Extension**.
+2. Click its toolbar icon to open the app.
+
+The app itself works the same on both — the sidebar on the left is always visible and
+lets you jump between the pages described below.
 
 ## 1. Set up your accounts
 
@@ -131,8 +143,8 @@ for exactly what this shares and when).
 
 ## Tips
 
-- By default nothing syncs anywhere. If you switch computers or reinstall Chrome, your
-  data doesn't come with you unless you've exported and re-imported it, or turned on
-  Google Drive sync beforehand.
+- By default nothing syncs anywhere. If you switch computers or reinstall the extension
+  (Chrome or Safari), your data doesn't come with you unless you've exported and
+  re-imported it, or turned on Google Drive sync beforehand.
 - Archiving vs. deleting: an account can't be deleted while referenced elsewhere, so
   clear out or reassign its incomes/bills/transfers first if you want it gone entirely.
