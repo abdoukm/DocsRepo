@@ -8,7 +8,8 @@ your device, unless you turn on the optional Google Drive sync feature yourself 
 ## Installing
 
 **Chrome** — install from the [Chrome Web Store](https://chromewebstore.google.com/detail/cashflow-monitor/pdjdpmadgjgkdoladhmgkbalagpghjof).
-Open it from the toolbar icon or the Chrome side panel picker.
+Open it from the toolbar icon or the Chrome side panel picker. Once open, the sidebar's
+**Open in full tab** / **Open in side panel** link switches between the two at any time.
 
 **Safari (macOS)** — download the latest `.dmg` from [GitHub Releases](https://github.com/abdoukm/cashflow-monitor/releases/latest),
 open it, and drag "Cashflow Monitor" into your Applications folder. Launch it once (you
@@ -24,10 +25,15 @@ lets you jump between the pages described below.
 Go to **Accounts** and add one entry per bank account, credit card, or cash account you
 want to track.
 
+- **Account type** — Checking, Savings, or Credit Card. For Credit Card accounts, the
+  balance tracks what you **owe** instead of what you have — charges increase it,
+  payments decrease it — and the fields relabel accordingly ("Starting balance owed",
+  "Credit limit" instead of "Low-balance warning threshold").
 - **Starting balance** and **As of date** — the balance you actually had on that date.
   This is the anchor everything else projects forward from.
-- **Low-balance warning threshold** (optional) — get flagged before you hit $0, not just
-  after. Leave blank to only warn on actual overdrafts.
+- **Low-balance warning threshold** (optional; **Credit limit** for Credit Card accounts)
+  — get flagged before you hit $0 (or, for a credit card, before you go over your limit).
+  Leave blank to only warn on actual overdrafts.
 - **Color** — used for the account's icon badge throughout the app (Dashboard cards,
   account tags in the Ledger, etc).
 
@@ -77,9 +83,10 @@ or amount without dismissing it.
 
 **Overdraft warnings** — every upcoming point where an account's Available balance dips
 below $0 (overdraft) or below its warning threshold (low balance), across your whole
-projection horizon. Click **Cover** on an overdraft to get suggestions for which other
-account(s) can fund a transfer to bring it back to $0 — accepting a suggestion creates
-the covering transfer for you.
+projection horizon — or, for a Credit Card account, rises above its credit limit ("Over
+limit" instead of "Overdraft"). Click **Cover** on an overdraft to get suggestions for
+which other account(s) can fund a transfer to bring it back to $0 — accepting a
+suggestion creates the covering transfer for you.
 
 ## 4. Ledger
 
@@ -148,3 +155,7 @@ for exactly what this shares and when).
   re-imported it, or turned on Google Drive sync beforehand.
 - Archiving vs. deleting: an account can't be deleted while referenced elsewhere, so
   clear out or reassign its incomes/bills/transfers first if you want it gone entirely.
+- On Accounts, Bills, Income sources, and Transfers, clicking anywhere on a row opens it
+  for editing (same as clicking its Edit button); clicking a different row switches to
+  that one instead, and closing/switching away from unsaved changes asks first. Drag the
+  bar between the table and the edit panel to resize how much space each gets.
