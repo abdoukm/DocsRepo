@@ -25,17 +25,36 @@ lets you jump between the pages described below.
 Go to **Accounts** and add one entry per bank account, credit card, or cash account you
 want to track.
 
-- **Account type** — Checking, Savings, or Credit Card. For Credit Card accounts, the
-  balance tracks what you **owe** instead of what you have — charges increase it,
-  payments decrease it — and the fields relabel accordingly ("Starting balance owed",
-  "Credit limit" instead of "Low-balance warning threshold").
+- **Account type** — Checking, Savings, Credit Card, Loan, or Mortgage. For the three debt
+  types (Credit Card, Loan, Mortgage), the balance tracks what you **owe** instead of what
+  you have — charges/interest increase it, payments decrease it — and the fields relabel
+  accordingly ("Starting balance owed", "Balance alert threshold" instead of "Low-balance
+  warning threshold").
 - **Starting balance** and **As of date** — the balance you actually had on that date.
   This is the anchor everything else projects forward from.
-- **Low-balance warning threshold** (optional; **Credit limit** for Credit Card accounts)
-  — get flagged before you hit $0 (or, for a credit card, before you go over your limit).
-  Leave blank to only warn on actual overdrafts.
+- **Low-balance warning threshold** (optional; a balance-**above**-this alert for debt
+  accounts — naturally read as the credit limit for a Credit Card) — leave blank to only
+  warn on actual overdrafts (or, for debt accounts, not warn at all).
+- **Currency** — defaults to your Settings currency, but each account can be set to a
+  different one (USD, CAD, EUR, GBP, AUD, CHF, JPY, EGP). A Transfer between two accounts
+  in different currencies gets its own Exchange rate field (see below).
 - **Color** — used for the account's icon badge throughout the app (Dashboard cards,
   account tags in the Ledger, etc).
+
+**Credit Card accounts** additionally have: **APR for purchases** and **APR for cash
+advances** (optional, %), a **Minimum payment** rule (a fixed dollar amount or a percent
+of balance), and a **Statement closing date** (the day your billing cycle closes). These
+feed the Dashboard's projected-balance estimate and the "Minimum payment" / "Full
+statement balance" Transfer amount modes below.
+
+**Loan and Mortgage accounts** additionally have: **Term** (years, informational),
+**Annual Percentage Rate**, **Payment** (the regular installment amount), and **Extra
+principal payment** (informational). These feed the Dashboard's projected-balance and
+estimated-payoff-date, and the "Account's payment amount" Transfer amount mode.
+
+All three debt types also have a **Payment frequency** (Monthly or Bi-weekly) and a
+**Due date** — set these to unlock the "smart" due-date-relative Transfer options below
+and the "Debt payment due soon" notification.
 
 You can edit or delete an account later; deletion is blocked while any income, bill, or
 transfer still references it (so you don't silently orphan scheduled entries).
@@ -57,6 +76,28 @@ Each of these supports four recurrence types:
 
 All three list pages (Income sources, Bills, Transfers) work the same way: add, edit, or
 delete an entry, and the table shows its next-run recurrence description.
+
+**Smart debt-payment transfers** — when a Transfer's "To" account is a Credit Card, Loan,
+or Mortgage, two fields switch from fixed values to dynamic ones you can opt into:
+
+- **Amount** can follow the account instead of a number you maintain by hand: "Minimum
+  payment" or "Full statement balance" for a Credit Card, or "Account's payment amount"
+  for a Loan/Mortgage. The real amount is recalculated fresh for each occurrence from the
+  account's own fields (e.g. its minimum-payment rule), so it stays correct as your
+  balance changes — no need to re-edit the transfer every month.
+- **Date** can be set to "On the due date" or "N days before the due date" instead of a
+  manual recurrence — derived from the account's own Due date and Payment frequency.
+
+Both require the target account to have a Due date/relevant fields set (see Accounts
+above). A Loan/Mortgage transfer also shows a live **Estimated payoff** date (or "Won't
+pay off at this payment amount" if the payment doesn't cover accruing interest) right in
+the form as you adjust amount/dates.
+
+**Cross-currency transfers** — if the "From" and "To" accounts use different currencies,
+an **Exchange rate** field appears (1 source-currency unit = ? destination-currency
+units) along with a toggle to type the amount in either currency. Leave the rate blank
+and it defaults to 1:1, which is very likely wrong — fill in a real rate for an accurate
+conversion.
 
 ## 3. Dashboard
 
@@ -81,12 +122,19 @@ transfer in your bank/card app — this only dismisses it from the reminder list
 transfer itself and its Ledger entries are untouched. **Edit** lets you adjust its date
 or amount without dismissing it.
 
+For a Credit Card, Loan, or Mortgage account, the tile also shows a **Next Close
+Projected Balance** — an interest-aware estimate of what you'll owe at the next statement
+close (Credit Card) or due date (Loan/Mortgage), factoring in APR and any scheduled
+payments between now and then. Loan/Mortgage tiles additionally show an **Est. payoff**
+date (or "Won't pay off" if the current payment doesn't cover accruing interest). Both are
+purely informational estimates — nothing is ever written to the Ledger for them.
+
 **Overdraft warnings** — every upcoming point where an account's Available balance dips
 below $0 (overdraft) or below its warning threshold (low balance), across your whole
-projection horizon — or, for a Credit Card account, rises above its credit limit ("Over
-limit" instead of "Overdraft"). Click **Cover** on an overdraft to get suggestions for
-which other account(s) can fund a transfer to bring it back to $0 — accepting a
-suggestion creates the covering transfer for you.
+projection horizon — or, for a debt account, rises above its threshold ("Over limit" for
+Credit Card, "Above threshold" for Loan/Mortgage). Click **Cover** on an overdraft to get
+suggestions for which other account(s) can fund a transfer to bring it back down —
+accepting a suggestion creates the covering transfer for you.
 
 ## 4. Ledger
 
@@ -112,7 +160,8 @@ as far back as the earliest account's starting-balance date).
 
 - **Projection horizon (months ahead)** — how far into the future the Ledger and
   Dashboard project by default.
-- **Currency** — display currency for all amounts (USD, CAD, EUR, GBP, AUD).
+- **Currency** — the default display currency (USD, CAD, EUR, GBP, AUD, CHF, JPY, EGP)
+  for any account that doesn't set its own currency (see Accounts above).
 
 ### Backup (Export / Import)
 
@@ -147,6 +196,20 @@ for exactly what this shares and when).
   re-signing in roughly every 7 days; that's expected, not a bug.)
 - **Disconnect** turns sync off. Nothing is deleted on either side — your local data
   stays as it is, and the Drive file is left untouched.
+
+### Notifications (optional)
+
+Settings has an **Enable notifications** checkbox (off by default). Once on, choose which
+kinds you want as native browser notifications, each with its own toggle:
+
+- **Bill due soon**
+- **Low balance / overdraft / over-limit warning**
+- **Debt payment due soon** (Credit Card / Loan / Mortgage)
+
+**Days before due to notify** controls the shared lookahead for the bill/debt-payment
+checks. **Send a test notification** fires one immediately so you can confirm your
+browser/OS is letting them through. Everything runs on a background alarm entirely
+on-device — see `PRIVACY.md` for details.
 
 ## Tips
 

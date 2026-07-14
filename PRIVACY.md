@@ -1,6 +1,6 @@
 # Privacy Policy — Cashflow Monitor
 
-**Last updated:** 2026-07-08
+**Last updated:** 2026-07-14
 
 Cashflow Monitor stores your data locally on your device by default. It also has an
 optional, off-by-default Google Drive sync feature you must explicitly turn on in
@@ -8,7 +8,8 @@ Settings — until you do, the extension makes no network requests at all.
 
 ## What data the extension handles
 
-Everything you enter — accounts, starting balances, income sources, bills, transfers,
+Everything you enter — accounts (including loan/mortgage/credit-card details like APR,
+minimum payment, and due dates), starting balances, income sources, bills, transfers,
 recurrence rules, cleared/reconciled status, and app settings — is financial planning
 data you type in yourself. None of it is auto-imported from any bank, card issuer, or
 other service.
@@ -63,6 +64,16 @@ anything once you explicitly turn it on and sign in with your Google account.
   local data and the Drive file are both left exactly as they were — nothing is deleted.
 - Cashflow Monitor's own developer has no access to this data; it goes directly from
   your browser to your Google Drive over Google's API.
+
+## Browser notifications (optional, off by default)
+
+Settings has a **notifications** section (bill due soon, low balance/overdraft/over-limit,
+debt payment due soon). It's off by default and, once enabled, works entirely on-device:
+a background alarm periodically checks your own already-local data against your chosen
+lookahead window and shows a native browser notification via `chrome.notifications` when
+something matches. Nothing about this feature sends data anywhere, adds a new data type,
+or talks to any server — it only reads the same locally-stored accounts/bills/transfers
+described above. Turning it off stops the checks; no notification history is kept.
 
 ## Changes to this policy
 
