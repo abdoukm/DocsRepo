@@ -156,7 +156,18 @@ as far back as the earliest account's starting-balance date).
 - Filters along the header (date, description, type, account, amount, balance) narrow
   the table further; up to three filters can be active at once.
 
-## 5. Settings
+## 5. Exporting to Excel
+
+Every page with a data table — Accounts, Bills, Income sources, Transfers, Ledger, Online
+transactions, Holdings — and every Dashboard panel has a small **Export to Excel** button
+(top right). It downloads a formatted `.xlsx` spreadsheet of that page's full data,
+including every field the app tracks (not just the columns shown on screen), already set
+up as a colored, filterable table with a frozen header row and sensible column widths.
+This is separate from the **Export data** JSON backup below — that one is a complete
+backup/restore of your whole dataset; the Excel export is for reviewing or sharing one
+page's data in a spreadsheet.
+
+## 6. Settings
 
 - **Projection horizon (months ahead)** — how far into the future the Ledger and
   Dashboard project by default.
